@@ -53,7 +53,16 @@ def save_sales(sales_df):
 # Main App Config
 st.set_page_config(page_title="Kolkata Shop Manager", layout="wide")
 
-st.title("কলকাতা লোকাল শপ ম্যানেজার")
+st.title("কলকাতা লোকাল শপ ম্যানেজার")# ... তোমার আগের কোড ...
+
+st.set_page_config(page_title="Kolkata Shop Manager", layout="wide")
+
+# এখানে লোগো যোগ করো ↓↓↓
+st.logo("logo.png", size="medium")           # ← নতুন লাইন
+
+st.title("কলকাতা লোকাল শপ ম্যানেজার")      # ← এটা আগের লাইন ৫৭
+st.markdown("***ছোট দোকানদারদের জন্য সিম্পল ইনভেন্টরি + বিলিং অ্যাপ***")
+# ... বাকি কোড ...
 st.markdown("**ছোট দোকানদারদের জন্য সিম্পল ইনভেন্টরি + বিলিং অ্যাপ**")
 st.markdown("---")
 
