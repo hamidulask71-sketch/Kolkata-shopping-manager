@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>📚 শিক্ষা সাথী - এআই শিক্ষা সহায়ক সফটওয়্যার</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Poppins', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
+
+        .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 40px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* হেডার */
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            padding: 25px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .logo-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .edu-logo {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .logo-text h1 {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        /* ভাষা সিলেক্টর */
+        .language-selector {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .lang-btn {
+            padding: 8px 20px;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: white;
+            color: #4f46e5;
+        }
+
+        /* মেনু ট্যাব */
+        .menu-tabs {
+            display: flex;
+            background: #f1f5f9;
+            padding: 10px 15px 0 15px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 8px;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            border-radius: 30px 30px 0 0;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #4f46e5;
+            border-bottom: 3px solid #4f46e5;
+        }
+
+        /* কন্টেন্ট এলাকা */
+        .content-area {
+            padding: 20px;
+            min-height: 500px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* চ্যাট এলাকা */
+        .chat-container {
+            background: #f8fafc;
+            border-radius: 24px;
+            padding: 15px;
+            height: 400px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+        }
+
+        .user-message {
+            justify-content: flex-end;
+        }
+
+        .bot-message {
+            justify-content: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .user-message .message-bubble {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            border-radius: 20px 20px 5px 20px;
+        }
+
+        .bot-message .message-bubble {
+            background: white;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px 20px 20px 5px;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-area input {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 50px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .input-area input:focus {
+            border-color: #4f46e5;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border: none;
+            padding: 0 20px;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* ম্যাথ সলভার এলাকা */
+        .math-input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .solve-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border: none;
+            padding: 14px;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .math-result {
+            background: #f0fdf4;
+            padding: 20px;
+            border-radius: 20px;
+            margin-top: 15px;
+            border-left: 4px solid #10b981;
+        }
+
+        /* ডেইলি প্রবলেম এলাকা */
+        .daily-card {
+            background: linear-gradient(135deg, #fef3c7, #fffbeb);
+            border-radius: 24px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid #f59e0b;
+            margin-bottom: 20px;
+        }
+
+        .daily-question {
+            font-size: 18px;
+            font-weight: 600;
+            color: #92400e;
+            margin: 15px 0;
+        }
+
+        .daily-answer {
+            background: white;
+            padding: 15px;
+            border-radius: 16px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        /* লোডার */
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #e2e8f0;
+            border-top-color: #4f46e5;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .typing {
+            display: flex;
+            gap: 5px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 20px;
+            width: 60px;
+        }
+
+        .typing span {
+            width: 8px;
+            height: 8px;
+            background: #94a3b8;
+            border-radius: 50%;
+            animation: bounce 0.5s ease infinite;
+        }
+
+        .typing span:nth-child(2) { animation-delay: 0.1s; }
+        .typing span:nth-child(3) { animation-delay: 0.2s; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .footer {
+            background: #f1f5f9;
+            padding: 15px;
+            text-align: center;
+            font-size: 11px;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- হেডার -->
+        <div class="header">
+            <div class="logo-area">
+                <div class="edu-logo">📚</div>
+                <div class="logo-text">
+                    <h1>শিক্ষা সাথী</h1>
+                    <p>এআই শিক্ষা সহায়ক সফটওয়্যার</p>
+                </div>
+            </div>
+            <div class="language-selector">
+                <button class="lang-btn active" data-lang="bn">🇧🇩 বাংলা</button>
+                <button class="lang-btn" data-lang="en">🇬🇧 English</button>
+            </div>
+        </div>
+
+        <!-- মেনু ট্যাব -->
+        <div class="menu-tabs">
+            <button class="tab-btn active" data-tab="chat">💬 এআই চ্যাটবট</button>
+            <button class="tab-btn" data-tab="math">📐 গণিত সমাধান</button>
+            <button class="tab-btn" data-tab="daily">⭐ ডেইলি প্রবলেম</button>
+        </div>
+
+        <!-- কন্টেন্ট এলাকা -->
+        <div class="content-area">
+            <!-- এআই চ্যাটবট ট্যাব -->
+            <div id="chat" class="tab-content active">
+                <div class="chat-container" id="chatContainer">
+                    <div class="message bot-message">
+                        <div class="message-bubble">
+                            👋 হ্যালো! আমি আপনার এআই শিক্ষা সহায়ক। যেকোনো প্রশ্ন করতে পারেন।
+                        </div>
+                    </div>
+                </div>
+                <div class="input-area">
+                    <input type="text" id="questionInput" placeholder="আপনার প্রশ্ন লিখুন...">
+                    <button class="send-btn" id="sendBtn">➤</button>
+                </div>
+            </div>
+
+            <!-- গণিত সমাধান ট্যাব -->
+            <div id="math" class="tab-content">
+                <textarea class="math-input" id="mathProblem" rows="3" placeholder="যেমন: (25 + 15) × 2 = ?&#10;বা&#10;x² + 5x + 6 = 0 এর সমাধান কর"></textarea>
+                <button class="solve-btn" id="solveMathBtn">🧮 সমাধান করুন</button>
+                <div id="mathResult" class="math-result" style="display: none;">
+                    <strong>📝 সমাধান:</strong>
+                    <p id="mathSolution"></p>
+                </div>
+            </div>
+
+            <!-- ডেইলি প্রবলেম ট্যাব -->
+            <div id="daily" class="tab-content">
+                <div class="daily-card">
+                    <span style="font-size: 40px;">⭐</span>
+                    <h3 style="color:#92400e;">আজকের চ্যালেঞ্জ</h3>
+                    <div class="daily-question" id="dailyQuestion">
+                        একটি আয়তক্ষেত্রের দৈর্ঘ্য ১০ মিটার এবং প্রস্থ ৫ মিটার। এর ক্ষেত্রফল কত?
+                    </div>
+                    <button class="solve-btn" id="showDailyAnswerBtn" style="background:#f59e0b;">📖 উত্তর দেখুন</button>
+                    <div id="dailyAnswer" class="daily-answer">
+                        <strong>✅ উত্তর:</strong>
+                        <p id="dailyAnswerText"></p>
+                    </div>
+                </div>
+                <button class="solve-btn" id="newDailyBtn" style="background:#8b5cf6;">🔄 নতুন সমস্যা</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <span>📚 শিক্ষা সাথী - এআই শিক্ষা সহায়ক | যেকোনো প্রশ্নের উত্তর ২৪/৭</span>
+        </div>
+    </div>
+
+    <script>
+        // ==================== ভাষা ভেরিয়েবল ====================
+        let currentLang = 'bn';
+        
+        // ==================== বাংলা ও ইংরেজি ডাটাবেজ ====================
+        const content = {
+            bn: {
+                welcome: "👋 হ্যালো! আমি আপনার এআই শিক্ষা সহায়ক। যেকোনো প্রশ্ন করতে পারেন।",
+                mathPlaceholder: "যেমন: (25 + 15) × 2 = ?\nঅথবা\nx² + 5x + 6 = 0 এর সমাধান কর",
+                mathSolving: "📐 সমাধান করা হচ্ছে...",
+                dailyQuestion1: "একটি আয়তক্ষেত্রের দৈর্ঘ্য ১০ মিটার এবং প্রস্থ ৫ মিটার। এর ক্ষেত্রফল কত?",
+                dailyAnswer1: "আয়তক্ষেত্রের ক্ষেত্রফল = দৈর্ঘ্য × প্রস্থ = ১০ × ৫ = ৫০ বর্গমিটার।",
+                dailyQuestion2: "একটি বৃত্তের ব্যাসার্ধ ৭ সেমি। এর পরিধি কত? (π = ৩.১৪)",
+                dailyAnswer2: "বৃত্তের পরিধি = ২πr = ২ × ৩.১৪ × ৭ = ৪৩.৯৬ সেমি।",
+                dailyQuestion3: "১০ টি আমের দাম ২০০ টাকা। ৫টি আমের দাম কত?",
+                dailyAnswer3: "১টি আমের দাম = ২০০ ÷ ১০ = ২০ টাকা, ৫টি আমের দাম = ২০ × ৫ = ১০০ টাকা।",
+                dailyQuestion4: "একটি সংখ্যার ২০% হলো ৪০। সংখ্যাটি কত?",
+                dailyAnswer4: "সংখ্যা × (২০/১০০) = ৪০ → সংখ্যা = ৪০ × (১০০/২০) = ২০০।",
+                dailyQuestion5: "যদি a = ৫ এবং b = ৩ হয়, তাহলে a² + b² = কত?",
+                dailyAnswer5: "a² + b² = ৫² + ৩² = ২৫ + ৯ = ৩৪।",
+                typing: "টাইপ করছি..."
+            },
+            en: {
+                welcome: "👋 Hello! I'm your AI Learning Assistant. Ask me any question!",
+                mathPlaceholder: "Example: (25 + 15) × 2 = ?\nor\nSolve x² + 5x + 6 = 0",
+                mathSolving: "📐 Solving...",
+                dailyQuestion1: "A rectangle has length 10m and width 5m. What is its area?",
+                dailyAnswer1: "Area of rectangle = length × width = 10 × 5 = 50 square meters.",
+                dailyQuestion2: "A circle has radius 7cm. What is its circumference? (π = 3.14)",
+                dailyAnswer2: "Circumference = 2πr = 2 × 3.14 × 7 = 43.96 cm.",
+                dailyQuestion3: "10 mangoes cost 200 taka. What is the cost of 5 mangoes?",
+                dailyAnswer3: "Price of 1 mango = 200 ÷ 10 = 20 taka, Price of 5 mangoes = 20 × 5 = 100 taka.",
+                dailyQuestion4: "20% of a number is 40. Find the number.",
+                dailyAnswer4: "Number × (20/100) = 40 → Number = 40 × (100/20) = 200.",
+                dailyQuestion5: "If a = 5 and b = 3, then a² + b² = ?",
+                dailyAnswer5: "a² + b² = 5² + 3² = 25 + 9 = 34.",
+                typing: "Typing..."
+            }
+        };
+
+        // ডেইলি প্রবলেম ডাটাবেজ
+        const dailyProblems = [
+            { bn: content.bn.dailyQuestion1, en: content.en.dailyQuestion1, answerBn: content.bn.dailyAnswer1, answerEn: content.en.dailyAnswer1 },
+            { bn: content.bn.dailyQuestion2, en: content.en.dailyQuestion2, answerBn: content.bn.dailyAnswer2, answerEn: content.en.dailyAnswer2 },
+            { bn: content.bn.dailyQuestion3, en: content.en.dailyQuestion3, answerBn: content.bn.dailyAnswer3, answerEn: content.en.dailyAnswer3 },
+            { bn: content.bn.dailyQuestion4, en: content.en.dailyQuestion4, answerBn: content.bn.dailyAnswer4, answerEn: content.en.dailyAnswer4 },
+            { bn: content.bn.dailyQuestion5, en: content.en.dailyQuestion5, answerBn: content.bn.dailyAnswer5, answerEn: content.en.dailyAnswer5 }
+        ];
+
+        let currentDailyIndex = 0;
+
+        // ==================== এআই উত্তর জেনারেশন ফাংশন ====================
+        function getAIAnswer(question, lang) {
+            const q = question.toLowerCase();
+            
+            // গণিতের সমস্যা চেক
+            if (q.includes('+') || q.includes('-') || q.includes('×') || q.includes('*') || q.includes('÷') || q.includes('/')) {
+                try {
+                    let expr = question.replace(/×/g, '*').replace(/÷/g, '/').replace(/\s/g, '');
+                    // বর্গমূল
+                    if (expr.includes('sqrt')) {
+                        let match = expr.match(/sqrt\((\d+)\)/);
+                        if (match) {
+                            let result = Math.sqrt(parseInt(match[1]));
+                            return lang === 'bn' ? `√${match[1]} = ${result}` : `√${match[1]} = ${result}`;
+                        }
+                    }
+                    let result = eval(expr);
+                    return lang === 'bn' ? `উত্তর: ${result}` : `Answer: ${result}`;
+                } catch(e) {
+                    return lang === 'bn' ? 'গণিতের সমস্যাটি সঠিকভাবে লিখুন (যেমন: 25+15)' : 'Please write math problem correctly (ex: 25+15)';
+                }
+            }
+            
+            // দ্বিঘাত সমীকরণ
+            if (q.includes('x²') || q.includes('x^2')) {
+                return lang === 'bn' 
+                    ? 'দ্বিঘাত সমীকরণের জন্য: ax² + bx + c = 0 আকারে লিখুন। যেমন: 1x² + 5x + 6 = 0'
+                    : 'For quadratic equations, write as: ax² + bx + c = 0. Example: 1x² + 5x + 6 = 0';
+            }
+            
+            // সাধারণ জ্ঞান
+            const answers = {
+                bn: {
+                    'ঢাকা': 'ঢাকা বাংলাদেশের রাজধানী। এটি বুড়িগঙ্গা নদীর তীরে অবস্থিত।',
+                    'বাংলাদেশ': 'বাংলাদেশ দক্ষিণ এশিয়ার একটি দেশ। স্বাধীনতা লাভ করে ১৯৭১ সালে।',
+                    'সূর্য': 'সূর্য আমাদের সৌরজগতের কেন্দ্র। এটি একটি নক্ষত্র।',
+                    'চাঁদ': 'চাঁদ পৃথিবীর একমাত্র প্রাকৃতিক উপগ্রহ।',
+                    'পানি': 'পানির রাসায়নিক সংকেত H₂O। এটি জীবন ধারণের জন্য অপরিহার্য।'
+                },
+                en: {
+                    'dhaka': 'Dhaka is the capital of Bangladesh. It is located on the Buriganga River.',
+                    'bangladesh': 'Bangladesh is a country in South Asia. It gained independence in 1971.',
+                    'sun': 'The Sun is the center of our solar system. It is a star.',
+                    'moon': 'The Moon is Earth\'s only natural satellite.',
+                    'water': 'Water\'s chemical formula is H₂O. It is essential for life.'
+                }
+            };
+            
+            for (let key in answers[lang]) {
+                if (q.includes(key)) {
+                    return answers[lang][key];
+                }
+            }
+            
+            // ডিফল্ট উত্তর
+            return lang === 'bn' 
+                ? `"${question}" - এই প্রশ্নের উত্তর: এটি একটি ভালো প্রশ্ন। আরও জানতে চাইলে নির্দিষ্ট করে জিজ্ঞাসা করুন।`
+                : `"${question}" - This is a good question. Please ask more specifically for detailed answers.`;
+        }
+
+        // ==================== চ্যাট ফাংশন ====================
+        async function sendMessage() {
+            const input = document.getElementById('questionInput');
+            const question = input.value.trim();
+            if (!question) return;
+            
+            // ইউজারের মেসেজ দেখান
+            addMessage(question, 'user');
+            input.value = '';
+            
+            // টাইপিং ইন্ডিকেটর
+            addTypingIndicator();
+            
+            // এআই উত্তর জেনারেট (সিমুলেটেড)
+            setTimeout(() => {
+                removeTypingIndicator();
+                const answer = getAIAnswer(question, currentLang);
+                addMessage(answer, 'bot');
+            }, 800);
+        }
+        
+        function addMessage(text, type) {
+            const container = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}-message`;
+            messageDiv.innerHTML = `<div class="message-bubble">${text}</div>`;
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        function addTypingIndicator() {
+            const container = document.getElementById('chatContainer');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot-message';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `<div class="typing"><span></span><span></span><span></span></div>`;
+            container.appendChild(typingDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) indicator.remove();
+        }
+        
+        // ==================== গণিত সমাধান ====================
+        function solveMath() {
+            const problem = document.getElementById('mathProblem').value.trim();
+            if (!problem) {
+                showMathResult(currentLang === 'bn' ? 'দয়া করে একটি গণিত সমস্যা লিখুন' : 'Please enter a math problem');
+                return;
+            }
+            
+            showMathResult(currentLang === 'bn' ? '📐 সমাধান করা হচ্ছে...' : '📐 Solving...');
+            
+            setTimeout(() => {
+                try {
+                    let expr = problem.replace(/×/g, '*').replace(/÷/g, '/').replace(/\s/g, '');
+                    
+                    // বর্গ সমীকরণ সলভ
+                    if (expr.includes('x²') || expr.includes('x^2')) {
+                        const match = expr.match(/(\d*)x²\s*\+\s*(\d*)x\s*\+\s*(\d*)/);
+                        if (match) {
+                            let a = parseInt(match[1]) || 1;
+                            let b = parseInt(match[2]) || 0;
+                            let c = parseInt(match[3]) || 0;
+                            const discriminant = b*b - 4*a*c;
+                            if (discriminant >= 0) {
+                                const root1 = (-b + Math.sqrt(discriminant)) / (2*a);
+                                const root2 = (-b - Math.sqrt(discriminant)) / (2*a);
+                                const solution = currentLang === 'bn' 
+                                    ? `x = ${root1} অথবা x = ${root2}`
+                                    : `x = ${root1} or x = ${root2}`;
+                                showMathResult(solution);
+                                return;
+                            }
+                        }
+                    }
+                    
+                    // সাধারণ গণিত
+                    let result = eval(expr);
+                    showMathResult(currentLang === 'bn' ? `সমাধান: ${result}` : `Solution: ${result}`);
+                } catch(e) {
+                    showMathResult(currentLang === 'bn' 
+                        ? 'গণিতের সমস্যাটি সঠিকভাবে লিখুন (যেমন: 25+15 বা 10*5)'
+                        : 'Please write math problem correctly (ex: 25+15 or 10*5)');
+                }
+            }, 500);
+        }
+        
+        function showMathResult(text) {
+            const resultDiv = document.getElementById('mathResult');
+            const solutionP = document.getElementById('mathSolution');
+            solutionP.innerHTML = text;
+            resultDiv.style.display = 'block';
+        }
+        
+        // ==================== ডেইলি প্রবলেম ====================
+        function loadDailyProblem() {
+            const problem = dailyProblems[currentDailyIndex];
+            document.getElementById('dailyQuestion').innerHTML = currentLang === 'bn' ? problem.bn : problem.en;
+            document.getElementById('dailyAnswer').style.display = 'none';
+        }
+        
+        function showDailyAnswer() {
+            const problem = dailyProblems[currentDailyIndex];
+            const answerText = currentLang === 'bn' ? problem.answerBn : problem.answerEn;
+            document.getElementById('dailyAnswerText').innerHTML = answerText;
+            document.getElementById('dailyAnswer').style.display = 'block';
+        }
+        
+        function newDailyProblem() {
+            currentDailyIndex = (currentDailyIndex + 1) % dailyProblems.length;
+            loadDailyProblem();
+        }
+        
+        // ==================== ভাষা পরিবর্তন ====================
+        function changeLanguage(lang) {
+            currentLang = lang;
+            
+            // বাটন আপডেট
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // ওয়েলকাম মেসেজ আপডেট
+            document.getElementById('chatContainer').innerHTML = '';
+            addMessage(content[lang].welcome, 'bot');
+            
+            // ম্যাথ প্লেসহোল্ডার আপডেট
+            document.getElementById('mathProblem').placeholder = content[lang].mathPlaceholder;
+            
+            // ডেইলি প্রবলেম আপডেট
+            loadDailyProblem();
+        }
+        
+        // ==================== ইভেন্ট লিসেনার ====================
+        document.getElementById('sendBtn').addEventListener('click', sendMessage);
+        document.getElementById('questionInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+        document.getElementById('solveMathBtn').addEventListener('click', solveMath);
+        document.getElementById('showDailyAnswerBtn').addEventListener('click', showDailyAnswer);
+        document.getElementById('newDailyBtn').addEventListener('click', newDailyProblem);
+        
+        // ভাষা বাটন
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => changeLanguage(btn.getAttribute('data-lang')));
+        });
+        
+        // ট্যাব সুইচ
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.getAttribute('data-tab');
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // ইনিশিয়ালাইজ
+        loadDailyProblem();
+    </script>
+</body>
+</html>
